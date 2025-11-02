@@ -1,0 +1,89 @@
+/* styles/auth.css */
+.loginWrapper, .registerWrapper {
+  max-width: 400px;
+  margin: 50px auto;
+  padding: 32px;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  background-color: #ffffff;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  font-family: Arial, sans-serif;
+}
+
+.loginWrapper h1, .registerWrapper h1 {
+  text-align: center;
+  font-size: 2rem;
+  margin-bottom: 24px;
+  color: #333;
+}
+
+.loginWrapper label, .registerWrapper label {
+  display: block;
+  margin-bottom: 6px;
+  font-weight: 500;
+  color: #555;
+  margin-top: 20px;
+}
+
+.loginWrapper input, .registerWrapper input {
+  width: stretch;
+  padding: 10px 12px;
+  margin-bottom: 3px;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  font-size: 1rem;
+  transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+.loginWrapper input:focus, .registerWrapper input:focus {
+  border-color: #0070f3;
+  box-shadow: 0 0 0 2px rgba(0, 112, 243, 0.2);
+  outline: none;
+}
+
+.loginWrapper button, .registerWrapper button {
+  width: 100%;
+  padding: 12px;
+  background-color: #0070f3;
+  color: #fff;
+  border: none;
+  border-radius: 6px;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background-color 0.2s;
+  margin-top: 35px;
+}
+
+.loginWrapper button:hover, .registerWrapper button:hover {
+  background-color: #005bb5;
+}
+
+.loginWrapper span, .registerWrapper span {
+  display: block;
+  margin-top: 16px;
+  text-align: center;
+  color: #666;
+  font-size: 0.9rem;
+}
+
+.link {
+  font-size: 13px;
+  text-decoration: none;
+  display: flex;
+  justify-content: center;
+  margin-top: 5px;
+  color: #4f4f4f;
+  text-decoration: none;
+}
+
+.inputWrapper {
+  position: relative;
+}
+
+.errorMessage {
+  margin: 0;
+  font-size: 13px;
+  color: red;
+  position: absolute;
+}
