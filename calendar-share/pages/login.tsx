@@ -2,7 +2,7 @@ import Link from 'next/link';
 import styles from './styles/auth.module.css';
 import {useForm} from 'react-hook-form';
 import {zodResolver} from '@hookform/resolvers/zod';
-import {loginSchema, LoginShcemaType} from '@/types/resolver';
+import { loginSchema, LoginShcemaType } from '../types/resolver';
 
 export default function LoginPage() {
   const {

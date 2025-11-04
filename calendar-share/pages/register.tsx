@@ -2,17 +2,31 @@ import Link from 'next/link';
 import styles from './styles/auth.module.css';
 import {useForm} from 'react-hook-form';
 import {zodResolver} from '@hookform/resolvers/zod';
-import {registerSchema, RegisterSchemaType} from '@/types/resolver';
+import { useRouter } from 'next/router';
+import { registerSchema, RegisterSchemaType } from '../types/resolver';
 
 export default function RegisterPage() {
+  const router = useRouter();
   const {
     register,
     handleSubmit,
     formState: {errors},
   } = useForm({resolver: zodResolver(registerSchema)});
 
-  const onSubmit = (data: RegisterSchemaType) => {
-    console.log('data', data);
+  const onSubmit = async (data: RegisterSchemaType) => {
+    const res = await fetch('/api/register', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(data)
+    });
+    if(res.ok) {
+      const resData = await res.json();
+      console.log('resdata', resData);
+      // indexページに遷移する
+      router.push('/');
+    }
   };
 
   return (
