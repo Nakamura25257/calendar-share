@@ -3,8 +3,10 @@ import styles from './styles/auth.module.css';
 import {useForm} from 'react-hook-form';
 import {zodResolver} from '@hookform/resolvers/zod';
 import { loginSchema, LoginShcemaType } from '../types/resolver';
+import { useRouter } from 'next/router';
 
 export default function LoginPage() {
+  const router = useRouter();
   const {
     register,
     handleSubmit,
@@ -13,8 +15,24 @@ export default function LoginPage() {
     resolver: zodResolver(loginSchema),
   });
 
-  const onSubmit = (data: LoginShcemaType) => {
+  const onSubmit = async (data: LoginShcemaType) => {
     console.log(data);
+    
+    try {
+      const res = await fetch('/api/login', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(data)
+      });
+      if(res.ok) {
+        router.push('/');
+      }
+    }catch(error: unknown) {
+      console.error('error', error);
+
+    }
   };
 
   return (
