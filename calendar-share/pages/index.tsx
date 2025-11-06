@@ -7,7 +7,7 @@ import jwt from "jsonwebtoken";
  * SSRによってサーバー側で実行されるため、ページのHTMLを返す前に認証チェックができるので未認証ユーザーはそもそもページを閲覧できなくなる
  */
 export async function getServerSideProps(context: GetServerSidePropsContext) {
-  const token: string | undefined = context.req.headers.cookie;
+  const token: string | undefined = context.req.cookies?.token;
   if(!token) {
     return {
       // tokenがない場合

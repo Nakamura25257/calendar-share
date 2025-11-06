@@ -22,10 +22,8 @@ export default function RegisterPage() {
       body: JSON.stringify(data)
     });
     if(res.ok) {
-      const resData = await res.json();
-      console.log('resdata', resData);
-      // indexページに遷移する
-      router.push('/');
+      // ログインページに遷移する
+      router.push('/login');
     }
   };
 
