@@ -4,6 +4,19 @@ import {useForm} from 'react-hook-form';
 import {zodResolver} from '@hookform/resolvers/zod';
 import {useRouter} from 'next/router';
 import {registerSchema, RegisterSchemaType} from '../types/resolver';
+import {GetServerSidePropsContext} from 'next';
+import jwt from 'jsonwebtoken';
+
+export async function getServerSideProps(context: GetServerSidePropsContext) {
+  const token: string | undefined = context.req.cookies?.token;
+
+  if (token) {
+    jwt.verify(token, process.env.JWT_SECRET!);
+    return {
+      redirect: {destination: '/', permanent: false},
+    };
+  }
+}
 
 export default function RegisterPage() {
   const router = useRouter();

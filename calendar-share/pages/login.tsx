@@ -4,6 +4,26 @@ import {useForm} from 'react-hook-form';
 import {zodResolver} from '@hookform/resolvers/zod';
 import {loginSchema, LoginShcemaType} from '../types/resolver';
 import {useRouter} from 'next/router';
+import {GetServerSidePropsContext} from 'next';
+import jwt from 'jsonwebtoken';
+
+export async function getServerSideProps(context: GetServerSidePropsContext) {
+  const token: string | undefined = context.req.cookies?.token;
+
+  if (token) {
+    // JWTの検証
+    jwt.verify(token, process.env.JWT_SECRET!);
+    return {
+      redirect: {destination: '/', permanent: false},
+    };
+  }
+
+  return {
+    props: {
+      message: 'hoge',
+    },
+  };
+}
 
 export default function LoginPage() {
   const router = useRouter();
