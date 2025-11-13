@@ -1,3 +1,256 @@
 .main {
   width: 100%;
 }
+
+.addBtn {
+  border: none;
+  border-radius: 999px;
+  font-size: 2rem;
+  width: 70px;
+  height: 70px;
+  padding: 10px;
+  background-color: #1da1f2;
+  color: #fff;
+  opacity: 0.8;
+  vertical-align: middle;
+  position: fixed;
+  right: 10px;
+  bottom: 10px;
+  cursor: pointer;
+}
+
+.modalOverlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.5); /* 半透明の背景 */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
+
+.modalContent {
+  background-color: #fff; /* 白背景 */
+  padding: 2rem;
+  border-radius: 10px;
+  width: 90%;
+  max-width: 400px;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+  display: flex;
+  flex-direction: column; /* 縦並び */
+  gap: 1rem; /* 各フォーム要素の間隔 */
+  margin: 15px;
+}
+
+.modalContent h2 {
+  margin: 0 0 1rem 0;
+  text-align: center;
+  font-size: 1.5rem;
+}
+
+.modalContent label {
+  font-weight: 500;
+  color: #222;
+  display: flex;
+  flex-direction: column;
+}
+
+.modalContent select,
+.modalContent input,
+.modalContent textarea {
+  width: 100%;
+  padding: 0.5rem;
+  margin-top: 0.25rem;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  font-size: 1rem;
+  box-sizing: border-box;
+}
+
+.modalContent textarea {
+  min-height: 100px;
+  resize: none;
+}
+
+.modalActions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 0.5rem;
+}
+
+.modalContent button {
+  padding: 0.5rem 1rem;
+  border: none;
+  border-radius: 6px;
+  background-color: #0070f3;
+  color: #fff;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+.modalContent button:hover {
+  background-color: #005bb5;
+}
+
+.modalContent select:focus,
+.modalContent input:focus,
+.modalContent textarea:focus {
+  outline: none;
+}
+
+/* 🎨 FullCalendar ヘッダー全体 */
+:global(.fc-header-toolbar) {
+  background: #fff;
+  border-radius: 10px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+  padding: 0.75rem 1.25rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1rem;
+}
+
+/* 📅 タイトル（例：November 2025） */
+:global(.fc-toolbar-title) {
+  font-size: 1.4rem;
+  font-weight: 600;
+  color: #333;
+}
+
+/* 🔘 ボタン共通スタイル */
+:global(.fc-button) {
+  background: #0070f3;
+  border: none;
+  color: #fff;
+  border-radius: 6px;
+  padding: 0.4rem 0.8rem;
+  margin: 0 0.2rem;
+  font-size: 0.9rem;
+  font-weight: 500;
+  transition: all 0.2s ease;
+}
+
+/* 🧭 ホバー時 */
+:global(.fc-button:hover) {
+  background: #0059c1;
+}
+
+/* 🔁 today ボタンなど disabled 時 */
+:global(.fc-button:disabled) {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* ⬅️➡️ のアイコン */
+:global(.fc-icon) {
+  font-size: 1rem;
+}
+
+/* 🧭 ツールバー右側（矢印ボタン群） */
+:global(.fc-button-group) {
+  display: flex;
+  align-items: center;
+}
+
+:global(.fc-view-harness .fc-view-harness-active) {
+  height: 100vh;
+}
+
+@media (max-width: 768px) {
+  :global(.fc .fc-toolbar) {
+    display: flex;
+    align-content: center;
+    justify-content: center;
+    flex-direction: column;
+  }
+
+  /* 📅 タイトル（例：November 2025） */
+  :global(.fc-toolbar-title) {
+    font-size: 1rem !important;
+    font-weight: 600;
+  }
+
+  /* カレンダー全体を少し詰める */
+  :global(.fc) {
+    padding: 0.5rem;
+    box-shadow: none;
+    border-radius: 6px;
+  }
+
+  /* 曜日ヘッダーを小さく */
+  :global(.fc-col-header-cell) {
+    font-size: 0.75rem;
+    padding: 0.3rem 0;
+  }
+
+  /* 日付数字も小さく */
+  :global(.fc-daygrid-day-number) {
+    font-size: 0.75rem;
+    padding: 0.25rem;
+  }
+
+  /* イベントを1行に */
+  :global(.fc-event) {
+    font-size: 0.7rem;
+    padding: 1px 3px;
+    border-radius: 4px;
+  }
+
+  /* 曜日タイトルなどの間隔を狭める */
+  :global(.fc-view-harness) {
+    font-size: 0.8rem;
+  }
+
+  /* カレンダーのグリッドをスマホで見やすく */
+  :global(.fc-daygrid-day-frame) {
+    min-height: 60px;
+  }
+
+  :global(.fc-toolbar-chunk) {
+    margin-top: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    gap: 0.6rem;
+  }
+
+  :global(.fc-button-group button) {
+    background-color: #fff !important;
+    color: #000 !important;
+  }
+
+  :global(.fc .fc-button) {
+    padding: 2px 6px;
+    font-size: 15px;
+    background-color: transparent !important;
+    color: #000 !important;
+    border-radius: 999px;
+    padding: 3px 15px;
+  }
+
+  :global(.fc-direction-ltr .fc-toolbar > * > :not(:first-child)) {
+    margin-left: 0;
+  }
+
+  :global(.fc-button-group) {
+    gap: 10px;
+    width: 100vw;
+  }
+
+  :global(.fc .fc-button-group > .fc-button) {
+    border: none;
+    width: revert;
+    margin: 0;
+    padding: 0;
+  }
+
+  :global(.fc .fc-view-harness) {
+    height: 100% !important;
+    min-height: 380px !important;
+  }
+}
