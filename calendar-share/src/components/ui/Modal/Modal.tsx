@@ -1,31 +1,32 @@
-import {ChangeEvent, useContext, useEffect, useState} from 'react';
+import {ChangeEvent, useContext, useState} from 'react';
 import styles from './Modal.module.css';
-import {AddEvent, MyContext} from '../../../../pages';
+import {MyContext} from '../../../../pages';
+import {AddDateRequestType} from '../Calendar/types';
 
-type ModalProps = {
-  onSubmit: (data: AddEvent) => Promise<void>;
-  onCloseDialog: () => void;
+export type ModalInfo = {
+  type: string;
+  description: string;
+  startDate: string;
+  endDate: string;
 };
 
-export default function Modal({onSubmit, onCloseDialog}: ModalProps) {
-  const {type, content, description, startDate, endDate} =
-    useContext(MyContext);
+type ModalProps = {
+  onSubmit: (data: AddDateRequestType) => Promise<void>;
+  onCloseDialog: () => void;
+  email: string;
+};
+
+export default function Modal({onSubmit, onCloseDialog, email}: ModalProps) {
+  const {type, description, startDate, endDate} = useContext(MyContext);
 
   const [selectValue, setSelectValue] = useState<string>(type);
-  const [contentValue, setContentValue] = useState<string>(content);
   const [contentDescription, setContentDescription] =
     useState<string>(description);
   const [startTime, setStartTime] = useState<string>(startDate);
   const [endTime, setEndTime] = useState<string>(endDate);
-  const [email, setEmail] = useState<string>(() => {
-    if (typeof window !== 'undefined') {
-      return localStorage.getItem('email') ?? '';
-    } else return '';
-  });
 
-  const data: AddEvent = {
+  const data: AddDateRequestType = {
     type: selectValue,
-    content: contentValue,
     description: contentDescription,
     startDate: startTime,
     endDate: endTime,
@@ -48,17 +49,6 @@ export default function Modal({onSubmit, onCloseDialog}: ModalProps) {
             <option value="work">仕事</option>
             <option value="other">その他</option>
           </select>
-        </label>
-
-        <label>
-          内容:
-          <input
-            type="text"
-            placeholder="イベント名"
-            onChange={(e: ChangeEvent<HTMLInputElement>) =>
-              setContentValue(e.target.value)
-            }
-          />
         </label>
 
         <label>

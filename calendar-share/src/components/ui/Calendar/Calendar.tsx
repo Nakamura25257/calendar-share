@@ -1,24 +1,22 @@
 import FullCalendar from '@fullcalendar/react';
 import dayGridPlugin from '@fullcalendar/daygrid';
 import interactionPlugin, {DateClickArg} from '@fullcalendar/interaction';
+import {Dispatch, SetStateAction} from 'react';
+import {CalendarEvent} from './types';
 
 type CalendarProps = {
   handleDateClick: (e: DateClickArg) => void;
   calendarEvents: CalendarEvent[];
+  selectedDate: string;
+  setSelectedDate: Dispatch<SetStateAction<string>>;
 };
 
-type CalendarEvent = {
-  id: number;
-  title: string;
-  description: string;
-  start: string;
-  backgroundColor?: string;
-  borderColor?: string;
-  editable?: boolean;
-};
-
-
-export default function Calendar({handleDateClick, calendarEvents}: CalendarProps) {
+export default function Calendar({
+  handleDateClick,
+  calendarEvents,
+  selectedDate,
+  setSelectedDate,
+}: CalendarProps) {
   return (
     <>
       <FullCalendar
@@ -43,9 +41,11 @@ export default function Calendar({handleDateClick, calendarEvents}: CalendarProp
           right: 'prev,next',
         }}
         selectable={true}
-        select={(info) => {
-          console.log('info.startstr', info.startStr)
+        select={info => {
+          console.log('info.star', info.startStr);
+          setSelectedDate(info.startStr);
         }}
+        // dayCellDidMount={info => console.log('info')}
       />
     </>
   );

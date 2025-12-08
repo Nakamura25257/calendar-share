@@ -1,43 +1,31 @@
 import styles from './styles/index.module.css';
 import {GetServerSidePropsContext} from 'next';
 import jwt from 'jsonwebtoken';
-import {createContext, useEffect, useState} from 'react';
+import {createContext, useState} from 'react';
 import {Client} from 'pg';
-import Modal from '../src/components/ui/Modal/Modal';
+import Modal, {ModalInfo} from '../src/components/ui/Modal/Modal';
 import Calendar from '../src/components/ui/Calendar/Calendar';
-import {DateClickArg} from '@fullcalendar/interaction/index.js';
-import {convertDateToString} from '../src/utils/CalendarUtils';
+import {addOneDay, convertDateToString} from '../src/utils/CalendarUtils';
 import EventButtons from '../src/components/ui/eventButtons/EventButtons';
-
-export type AddEvent = {
-  type: string;
-  content: string;
-  description: string;
-  startDate: string;
-  endDate: string;
-  email: string;
-};
-
-type ModalInfo = {
-  type: string;
-  content: string;
-  description: string;
-  startDate: string;
-  endDate: string;
-};
+import {
+  AddDateRequestType,
+  CalendarEvent,
+} from '../src/components/ui/Calendar/types';
+import {
+  handleDateClick,
+  onDayShiftBtnClick,
+  onHolydayBtnClick,
+  onNightShiftBtnClick,
+  useCalendarActions,
+} from '../src/hooks/useCalendarActions';
 
 export const MyContext = createContext<ModalInfo>({
   type: 'holiday',
-  content: '',
   description: '',
   startDate: new Date().toLocaleDateString(),
   endDate: new Date().toLocaleDateString(),
 });
 
-/**
- * useEffectではなくSSRで実行することで、一瞬のログイン前のページの表示を防ぐことができ、
- * SSRによってサーバー側で実行されるため、ページのHTMLを返す前に認証チェックができるので未認証ユーザーはそもそもページを閲覧できなくなる
- */
 export async function getServerSideProps(context: GetServerSidePropsContext) {
   const token: string | undefined = context.req.cookies?.token;
   if (!token) {
@@ -81,77 +69,73 @@ export async function getServerSideProps(context: GetServerSidePropsContext) {
 }
 
 export default function IndexPage(calendarProps: any) {
-  const [calendarData, setCalendarData] = useState<ModalInfo[]>(
+  const [showModal, setShowModal] = useState<boolean>(false);
+
+  // 好ましくない実装
+  const [email, setEmail] = useState<string>(() => {
+    if (typeof window !== 'undefined') {
+      return localStorage.getItem('email') ?? '';
+    } else return '';
+  });
+
+  const [calendarData, setCalendarData] = useState<CalendarEvent[]>(
     JSON.parse(calendarProps.calendarProps),
-  ); // calendar情報格納
+  );
   const [modalInfo, setModalInfo] = useState<ModalInfo>({
     type: 'holiday',
-    content: '',
     description: '',
     startDate: '',
     endDate: '',
   });
-  const [showModal, setShowModal] = useState<boolean>(false); // Modal開閉情報
 
-  // イベント登録処理
-  const handleAddEvent = async (data: AddEvent) => {
-    try {
-      const res = await fetch('/api/calendar', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(data),
-      });
-      setCalendarData(prev => [...prev, data]);
-      if (res.ok) {
-        setShowModal(false);
-      }
-    } catch (e: unknown) {
-      if (e instanceof Error) {
-        console.error('error', e);
-      }
-    }
-  };
+  const [selectedDate, setSelectedDate] = useState<string>(() => {
+    return convertDateToString(new Date());
+  });
 
-  /**
-   * カレンダーセルクリック時処理
-   */
-  const handleDateClick = async (e: DateClickArg) => {
-    const date: string = convertDateToString(e.date);
-    setModalInfo(prev => ({
-      ...prev,
-      startDate: date,
-      endDate: date,
-    }));
-    setShowModal(true);
-  };
+  const {
+    handleDateClick,
+    onDayShiftBtnClick,
+    onNightShiftBtnClick,
+    onHolidayBtnClick,
+    handleAddDate,
+  } = useCalendarActions(
+    email,
+    selectedDate,
+    setCalendarData,
+    setShowModal,
+    setSelectedDate,
+  );
 
   return (
     <div className={styles.main}>
       <Calendar
         handleDateClick={handleDateClick}
         calendarEvents={calendarData}
+        selectedDate={selectedDate}
+        setSelectedDate={setSelectedDate}
       />
 
       {showModal && (
         <MyContext.Provider value={modalInfo}>
           <Modal
-            onSubmit={handleAddEvent}
+            onSubmit={handleAddDate}
             onCloseDialog={() => setShowModal(false)}
+            email={email}
           />
         </MyContext.Provider>
       )}
 
-      {/* イベント種別 */}
-      <EventButtons />
+      {/* イベント登録用ボタン */}
+      <EventButtons
+        onDayShiftBtnClick={onDayShiftBtnClick}
+        onNightShiftBtnClick={onNightShiftBtnClick}
+        onHolydayBtnClick={onHolidayBtnClick}
+      />
 
       <button
         type="button"
         className={styles.addBtn}
-        onClick={() => {
-          setShowModal(true);
-        }}
+        onClick={() => setShowModal(true)}
       >
         +
       </button>
