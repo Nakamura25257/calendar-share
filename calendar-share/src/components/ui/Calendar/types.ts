@@ -1,6 +1,6 @@
-// FullCalendar UI更新用の型
+// FullCalendar UI更新用の型&DBからのレスポンス型
 export type CalendarUIType = {
-  id: number;
+  id: string;
   title: string;
   description: string;
   start: string;
@@ -9,8 +9,8 @@ export type CalendarUIType = {
   editable?: boolean;
 };
 
-//DBにカレンダー情報を登録するための型
-export type CalendarResType = {
+// サーバーへ問い合わせるためのリクエスト型
+export type CalendarReqType = {
   type: string;
   description: string;
   startDate: string;

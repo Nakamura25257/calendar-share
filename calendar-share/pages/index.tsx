@@ -7,10 +7,7 @@ import Modal, {ModalInfo} from '../src/components/ui/Modal/Modal';
 import Calendar from '../src/components/ui/Calendar/Calendar';
 import {convertDateToString} from '../src/utils/CalendarUtils';
 import EventButtons from '../src/components/ui/eventButtons/EventButtons';
-import {
-  CalendarResType,
-  CalendarUIType,
-} from '../src/components/ui/Calendar/types';
+import {CalendarUIType} from '../src/components/ui/Calendar/types';
 import {useCalendarActions} from '../src/hooks/useCalendarActions';
 
 export const MyContext = createContext<ModalInfo>({
@@ -81,6 +78,7 @@ export default function IndexPage(calendarProps: {calendarProps: string}) {
     } else return '';
   });
 
+  // UI描画用
   const [calendarData, setCalendarData] = useState<CalendarUIType[]>(
     JSON.parse(calendarProps.calendarProps).map((ev: CalendarUIType) => ({
       ...ev,
