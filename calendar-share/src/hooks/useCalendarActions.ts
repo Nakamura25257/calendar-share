@@ -9,6 +9,7 @@ import {
 } from '../components/ui/Calendar/types';
 import {addOneDay, convertDateToString} from '../utils/CalendarUtils';
 import {Dispatch, SetStateAction} from 'react';
+import {EventClickArg} from '@fullcalendar/core';
 
 // イベントタイプごとの色設定
 const EVENT_COLORS = {
@@ -25,8 +26,12 @@ export const useCalendarActions = (
   setSelectedDate: Dispatch<SetStateAction<string>>,
 ) => {
   // カレンダーセルクリック時処理
-  const handleDateClick = async (e: DateClickArg) => {
+  const handleDateClick = async (e: DateClickArg): Promise<void> => {
     // console.log('calendar cell click', e);
+  };
+
+  const handleEventClick = (e: EventClickArg): void => {
+    console.log('typeof e', e);
   };
 
   // 日勤ボタンクリック時処理
@@ -66,7 +71,12 @@ export const useCalendarActions = (
           ...colors,
         };
 
-        setCalendarData(prev => [...prev, postData]);
+        setCalendarData(prev => {
+          const filteredData: CalendarUIType[] = prev.filter(
+            item => item.start !== postData.start,
+          );
+          return [...filteredData, postData];
+        });
         setShowModal(false);
       }
     } catch (e: unknown) {
@@ -97,6 +107,7 @@ export const useCalendarActions = (
   };
 
   return {
+    handleEventClick,
     handleDateClick,
     onDayShiftBtnClick,
     onNightShiftBtnClick,
