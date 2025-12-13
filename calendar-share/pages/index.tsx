@@ -108,6 +108,7 @@ export default function IndexPage(calendarProps: {calendarProps: string}) {
   });
 
   const {
+    handleEventClick,
     handleDateClick,
     onDayShiftBtnClick,
     onNightShiftBtnClick,
@@ -124,6 +125,7 @@ export default function IndexPage(calendarProps: {calendarProps: string}) {
   return (
     <div className={styles.main}>
       <Calendar
+        handleEventClick={handleEventClick}
         handleDateClick={handleDateClick}
         CalendarUITypes={calendarData}
         selectedDate={selectedDate}

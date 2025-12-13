@@ -19,6 +19,25 @@ export default async function handler(
         email,
       ]);
       const currentUserId: string = user.rows[0].id;
+      const checkData = await pool.query(
+        'select exists (select 1 from calendars where user_id=$1 and start::date=$2) as exists',
+        [currentUserId, startDate],
+      );
+      const isDataExist: boolean = checkData.rows[0].exists;
+
+      // データがすでに登録されている場合は上書きする
+      if (isDataExist) {
+        // 既存のデータを削除
+        await pool.query(
+          `
+            delete from calendars
+            where user_id = $1
+            and start >= $2::date
+            and start < ($2::date + interval '1 day')
+            `,
+          [currentUserId, startDate],
+        );
+      }
 
       const result = await pool.query(
         'insert into calendars (user_id, title, description, start) values ($1, $2, $3, $4) returning id, title, description, start',
