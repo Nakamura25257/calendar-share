@@ -1,4 +1,4 @@
-import {ChangeEvent, useContext, useEffect, useState} from 'react';
+import {ChangeEvent, useContext, useState} from 'react';
 import styles from './Modal.module.css';
 import {MyContext} from '../../../../pages';
 import {CalendarReqType} from '../Calendar/types';

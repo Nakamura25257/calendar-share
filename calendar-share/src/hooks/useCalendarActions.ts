@@ -1,13 +1,21 @@
 import {DateClickArg} from '@fullcalendar/interaction';
-import {CalendarReqType, CalendarUIType} from '../components/ui/Calendar/types';
+import {
+  CalendarReqType,
+  CalendarUIType,
+  DAY_SHIFT,
+  DayTypes,
+  HOLIDAY,
+  NIGHT_SHIFT,
+} from '../components/ui/Calendar/types';
 import {addOneDay, convertDateToString} from '../utils/CalendarUtils';
 import {Dispatch, SetStateAction} from 'react';
 
-const HOLIDAY = '休日';
-const DAY_SHIFT = '日勤';
-const NIGHT_SHIFT = '夜勤';
-
-type DayTypes = typeof HOLIDAY | typeof DAY_SHIFT | typeof NIGHT_SHIFT;
+// イベントタイプごとの色設定
+const EVENT_COLORS = {
+  [HOLIDAY]: {backgroundColor: '#10b981', borderColor: '#059669'},
+  [DAY_SHIFT]: {backgroundColor: '#3b82f6', borderColor: '#2563eb'},
+  [NIGHT_SHIFT]: {backgroundColor: '#8b5cf6', borderColor: '#7c3aed'},
+} as const;
 
 export const useCalendarActions = (
   email: string,
@@ -51,9 +59,11 @@ export const useCalendarActions = (
         const startDate: Date = new Date(result.data[0].start);
         const formattedStartDate: string = convertDateToString(startDate);
         const calendarData: CalendarUIType = result.data[0];
+        const colors = EVENT_COLORS[data.type as keyof typeof EVENT_COLORS];
         const postData: CalendarUIType = {
           ...calendarData,
           start: formattedStartDate,
+          ...colors,
         };
 
         setCalendarData(prev => [...prev, postData]);
