@@ -1,17 +1,29 @@
 import styles from './styles/index.module.css';
 import {GetServerSidePropsContext} from 'next';
 import jwt from 'jsonwebtoken';
-import {createContext, useEffect, useState} from 'react';
+import {createContext, useState} from 'react';
 import {Client} from 'pg';
 import Modal, {ModalInfo} from '../src/components/ui/Modal/Modal';
 import Calendar from '../src/components/ui/Calendar/Calendar';
 import {convertDateToString} from '../src/utils/CalendarUtils';
 import EventButtons from '../src/components/ui/eventButtons/EventButtons';
-import {CalendarUIType} from '../src/components/ui/Calendar/types';
+import {
+  CalendarUIType,
+  DAY_SHIFT,
+  HOLIDAY,
+  NIGHT_SHIFT,
+} from '../src/components/ui/Calendar/types';
 import {useCalendarActions} from '../src/hooks/useCalendarActions';
 
+// イベントタイプごとの色設定
+const EVENT_COLORS = {
+  [HOLIDAY]: {backgroundColor: '#10b981', borderColor: '#059669'},
+  [DAY_SHIFT]: {backgroundColor: '#3b82f6', borderColor: '#2563eb'},
+  [NIGHT_SHIFT]: {backgroundColor: '#8b5cf6', borderColor: '#7c3aed'},
+} as const;
+
 export const MyContext = createContext<ModalInfo>({
-  type: '休日',
+  type: HOLIDAY,
   description: '',
   startDate: new Date().toLocaleDateString(),
 });
@@ -77,7 +89,13 @@ export default function IndexPage(calendarProps: {calendarProps: string}) {
 
   // UI描画用
   const [calendarData, setCalendarData] = useState<CalendarUIType[]>(
-    JSON.parse(calendarProps.calendarProps),
+    JSON.parse(calendarProps.calendarProps).map((event: CalendarUIType) => {
+      const colors = EVENT_COLORS[event.title as keyof typeof EVENT_COLORS];
+      return {
+        ...event,
+        ...colors,
+      };
+    }),
   );
   const [modalInfo, setModalInfo] = useState<ModalInfo>({
     type: 'holiday',
