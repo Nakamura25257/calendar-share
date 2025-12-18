@@ -3,9 +3,11 @@ import dayGridPlugin from '@fullcalendar/daygrid';
 import interactionPlugin, {DateClickArg} from '@fullcalendar/interaction';
 import {Dispatch, SetStateAction} from 'react';
 import {CalendarUIType} from './types';
+import {EventClickArg} from '@fullcalendar/core/index.js';
 
 type CalendarProps = {
-  handleDateClick: (e: DateClickArg) => void;
+  handleEventClick: (e: EventClickArg) => void;
+  handleDateClick: (e: DateClickArg) => Promise<void>;
   CalendarUITypes: CalendarUIType[];
   selectedDate: string;
   setSelectedDate: Dispatch<SetStateAction<string>>;
@@ -15,6 +17,7 @@ export default function Calendar({
   handleDateClick,
   CalendarUITypes,
   selectedDate,
+  handleEventClick,
   setSelectedDate,
 }: CalendarProps) {
   return (
@@ -24,6 +27,7 @@ export default function Calendar({
         plugins={[dayGridPlugin, interactionPlugin]}
         initialView="dayGridMonth"
         events={CalendarUITypes}
+        eventClick={handleEventClick}
         dateClick={handleDateClick}
         headerToolbar={{
           left: '',
@@ -41,7 +45,6 @@ export default function Calendar({
         }}
         dayMaxEvents={3}
         height="calc(100vh - 200px)"
-        // dayCellDidMount={info => console.log('info')}
       />
     </>
   );
