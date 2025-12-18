@@ -65,3 +65,7 @@
 .fc .fc-toolbar-title {
   font-size: 1.4rem;
 }
+
+.fc .fc-daygrid-day-frame{
+  min-height: 100px;
+}
