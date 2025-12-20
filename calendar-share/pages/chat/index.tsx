@@ -3,6 +3,7 @@ import styles from './styles.module.css';
 import {useRouter} from 'next/router';
 import Footer from '../../src/components/ui/footer/Footer';
 import {useFooterActions} from '../../src/hooks/useFooterActions';
+import Link from 'next/link';
 
 const ChatIndexPage = () => {
   const router = useRouter();
@@ -16,8 +17,9 @@ const ChatIndexPage = () => {
         className={styles.searchInput}
         placeholder="search friend"
       />
-      {/* 一覧表示(SP) */}
-      <div className={styles.chatLists}>
+
+      {/* 動的にhref要素を変更する */}
+      <Link className={styles.chatLists} href={'/chat/1'}>
         {/* demo */}
         <div className={styles.chatList}>
           <img src="" alt="" className={styles.chatImg} />
@@ -26,7 +28,7 @@ const ChatIndexPage = () => {
             <p className={styles.chatLastSentence}>最後の文章</p>
           </div>
         </div>
-      </div>
+      </Link>
 
       <Footer
         onChatBtnClick={onChatBtnClick}
